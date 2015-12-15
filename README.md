@@ -1,43 +1,29 @@
-Slick Cache Component
-=====================
+# Slick Cache package
 
-Slick cache component deals with cache providing services installed on
+[![Latest Version](https://img.shields.io/github/release/slickframework/cache.svg?style=flat-square)](https://github.com/slickframework/cache/releases)
+[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
+[![Build Status](https://img.shields.io/travis/slickframework/cache/develop.svg?style=flat-square)](https://travis-ci.org/slickframework/cache)
+[![Coverage Status](https://img.shields.io/scrutinizer/coverage/g/slickframework/cache/develop.svg?style=flat-square)](https://scrutinizer-ci.com/g/slickframework/cache/code-structure?branch=develop)
+[![Quality Score](https://img.shields.io/scrutinizer/g/slickframework/cache/develop.svg?style=flat-square)](https://scrutinizer-ci.com/g/slickframework/cache?branch=develop)
+[![Total Downloads](https://img.shields.io/packagist/dt/slick/cache.svg?style=flat-square)](https://packagist.org/packages/slick/cache)
+
+
+Slick cache package works with cache providing services installed on
 your system.
 
-I comes with support for *Memcached* (`memcached` daemon) and *File*
+It comes with support for *Memcached* (`memcached` daemon) and *File*
 (caching data into files) out of the box, but it also defines a driver
-interface that allow you to add your own drivers to your project.
+interface that allows you to add your own drivers to your project.
 
-Installing via Composer
------------------------
+## Install
 
-The recommended way to install Slick cache component is through
-[Composer][].
+Via Composer
 
-```bash
-# Install Composer
-curl -sS https://getcomposer.org/installer | php
+``` bash
+$ composer require slick/cache
 ```
 
-You can add Slick cache as a dependency using the composer.phar CLI:
-
-```bash
-php composer.phar require slick/cache
-```
-
-Alternatively, you can specify Slick cache as a dependency in your
-project’s existing composer.json file:
-
-```javascript
-{
-    "require": {
-        "slick/cache": "*"
-    }
-}  
-```
-
-
-Using a cache driver
+Usage
 --------------------
 
 To use a cache driver you simple need to call the `Cache::get()` static
@@ -172,13 +158,25 @@ Slick\Cache\DriverInterface | A `DriverInterface` instance for chaining method c
 > key search feature.
 >
 
-### Contribute
+## Testing
 
--   Issue Tracker: <https://github.com/slickframework/slick/issues>
--   Source Code: <https://github.com/slickframework/slick>
+``` bash
+$ vendor/bin/phpunit
+```
 
-### License
+## Contributing
 
-The project is licensed under the MIT License (MIT)
+Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 
-[Composer]: https://getcomposer.org/
+## Security
+
+If you discover any security related issues, please email silvam.filipe@gmail.com instead of using the issue tracker.
+
+## Credits
+
+- [Slick framework](https://github.com/slickframework)
+- [All Contributors](https://github.com/slickframework/database/graphs/contributors)
+
+## License
+
+The MIT License (MIT). Please see [License File](LICENSE.md) for more information.

@@ -2,17 +2,37 @@
     "name": "slick/cache",
     "description": "Cache component for Slick Framework",
     "license": "MIT",
+    "homepage": "https://github.com/slickframework/cache",
     "keywords": ["slick", "cache", "memcached"],
+    "authors": [
+        {
+            "name": "Filipe Silva",
+            "email": "silvam.filipe@gmail.com",
+            "role": "Developer"
+        }
+    ],
     "autoload": {
-        "psr-0": {
-            "Slick\\Cache\\": "src/"
+        "psr-4": {
+            "Slick\\Cache\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Slick\\Tests\\Cache\\": "tests"
         }
     },
     "require": {
-        "slick/common": "self.version",
-        "slick/filesystem": "self.version"
+        "slick/common": "@dev"
     },
-    "suggest": {
-        "ext-memcached": "For a better performance cache"
+    "require-dev": {
+        "phpunit/phpunit" : "4.*",
+        "scrutinizer/ocular": "~1.1",
+        "behat/behat": "~3.0.4"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.1-dev",
+            "dev-develop": "1.2-dev"
+        }
     }
 }
