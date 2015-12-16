@@ -9,23 +9,33 @@
 
 namespace Slick\Cache\Driver;
 
-use Slick\Cache\CacheInterface;
-use League\Flysystem\Filesystem;
 use League\Flysystem\Adapter\Local;
+use League\Flysystem\Filesystem;
+use Slick\Cache\CacheItem;
+use Slick\Cache\CacheItemInterface;
+use Slick\Cache\Exception\ServiceException;
+use Slick\Common\Base;
 
 /**
  * Uses file system to store cache data
  *
  * @package Slick\Cache\Driver
  * @author  Filipe Silva <silvam.filipe@gmail.com>
+ *
+ * @property string     $path
+ * @property Filesystem $filesystem
+ * @property string     $bin
+ * @property string     $cacheItemClass
+ * @property int        $duration
  */
-class File extends AbstractCacheDriver implements CacheInterface
+class File extends Base implements CacheDriverInterface
 {
 
     /**
+     * @readwrite
      * @var string
      */
-    private $path;
+    protected $path;
 
     /**
      * @readwrite
@@ -34,69 +44,22 @@ class File extends AbstractCacheDriver implements CacheInterface
     protected $filesystem;
 
     /**
-     * File cache driver with a path to the directory where to save the data
-     *
-     * @param string $path
+     * @readwrite
+     * @var int
      */
-    public function __construct($path)
-    {
-        $this->path = $path;
-    }
+    protected $duration = 120;
 
     /**
-     * Retrieves a previously stored value.
-     *
-     * @param String $key The key under witch value was stored.
-     * @param mixed $default The default value, if no value was stored before.
-     *
-     * @return mixed
-     *  The stored value or the default value if it was not found
-     *  on service cache.
+     * @readwrite
+     * @var string
      */
-    public function get($key, $default = false)
-    {
-        // TODO: Implement get() method.
-    }
+    protected $bin = 'cache-bin';
 
     /**
-     * Set/stores a value with a given key.
-     *
-     * @param String $key The key where value will be stored.
-     * @param mixed $value The value to store.
-     * @param integer $duration The live time of cache in seconds.
-     *
-     * @return self A self instance for chaining method calls.
+     * @readwrite
+     * @var string
      */
-    public function set($key, $value, $duration = -1)
-    {
-        // TODO: Implement set() method.
-    }
-
-    /**
-     * Erase the value stored with a given key.
-     *
-     * You can use the "?" and "*" wildcards to delete all matching keys.
-     * The "?" means a place holders for one unknown character, the "*" is
-     * a place holder for various characters.
-     *
-     * @param String $key The key under witch value was stored.
-     *
-     * @return self A self instance for chaining method calls.
-     */
-    public function erase($key)
-    {
-        // TODO: Implement erase() method.
-    }
-
-    /**
-     * Flushes all values controlled by this cache driver
-     *
-     * @return self A self instance for chaining method calls.
-     */
-    public function flush()
-    {
-        // TODO: Implement flush() method.
-    }
+    protected $cacheItemClass = 'Slick\Cache\CacheItem';
 
     /**
      * Lazy loads filesystem based on File::$path property
@@ -106,22 +69,150 @@ class File extends AbstractCacheDriver implements CacheInterface
     protected function getFilesystem()
     {
         if (null === $this->filesystem) {
-            $adapter = new Local($this->path);
+            $adapter = new Local($this->getPath());
             $this->filesystem = new Filesystem($adapter);
         }
         return $this->filesystem;
     }
 
     /**
-     * Calculates the duration for a cache item based on value user
-     * may define for it.
+     * Gets cache item saved with provided key
      *
-     * @see CacheInterface::set()
+     * @param string $key
      *
-     * @param integer $duration The live time of cache in seconds.
+     * @return CacheItemInterface
      */
-    protected function calculate($duration)
+    public function get($key)
     {
+        $data = false;
+        $name = $this->getFileName($key);
+        if ($this->getFilesystem()->has($name)) {
+            $data = $this->filesystem->read($name);
+        }
+        return $this->decode($data)->setKey($key);
+    }
 
+    /**
+     * Stores provided cache item
+     *
+     * @param CacheItemInterface $item
+     *
+     * @return CacheDriverInterface|self|$this
+     */
+    public function set(CacheItemInterface $item)
+    {
+        $result = $this->getFilesystem()
+            ->put(
+                $this->getFileName($item->getKey()),
+                $this->encode($item)
+            );
+
+        if (!$result) {
+            throw new ServiceException("Error trying to save cache data.");
+        }
+
+        return $this;
+    }
+
+    /**
+     * Erases cache item stored with provided key
+     *
+     * @param string $key
+     *
+     * @return CacheDriverInterface|self|$this
+     */
+    public function erase($key)
+    {
+        $name = $this->getFileName($key);
+        if ($this->getFilesystem()->has($name)) {
+            $this->getFilesystem()->delete($name);
+        }
+        return $this;
+    }
+
+    /**
+     * Deletes all saved items in this cache bin
+     *
+     * @return CacheDriverInterface|self|$this
+     */
+    public function flush()
+    {
+        $exists = $this->getFilesystem()->has($this->bin);
+        if ($exists) {
+            $this->getFilesystem()->deleteDir($this->bin);
+        }
+        return $this;
+    }
+
+    /**
+     * Creates file name for provided Cache item
+     *
+     * @param string $key
+     *
+     * @return string
+     */
+    protected function getFileName($key)
+    {
+        return "{$this->bin}/{$key}.tmp";
+    }
+
+    /**
+     * Encodes cache item preparing it to be saved
+     *
+     * @param CacheItemInterface $item
+     *
+     * @return string
+     */
+    protected function encode(CacheItemInterface $item)
+    {
+        $data = (object) [
+            'expires' => $item->getExpirationDate()->format('c'),
+            'data' => serialize($item->getData())
+        ];
+        return json_encode($data);
+    }
+
+    /**
+     * Decode provided data
+     *
+     * @param string $data Serialized data
+     *
+     * @return CacheItem
+     */
+    protected function decode($data)
+    {
+        $item = $this->getCacheItem();
+        if ($data !== false) {
+            $source = json_decode($data);
+            $item->setExpirationDate(new \DateTime($source->expires))
+                ->setData(unserialize($source->data));
+        }
+        return $item;
+    }
+
+    /**
+     * Returns an empty cache item
+     *
+     * @return CacheItemInterface
+     */
+    public function getCacheItem()
+    {
+        /** @var CacheItem $cacheItem */
+        $cacheItem = new $this->cacheItemClass();
+        $cacheItem->duration = $this->duration;
+        return $cacheItem;
+    }
+
+    /**
+     * Returns cache root path
+     *
+     * @return string
+     */
+    protected function getPath()
+    {
+        if (null === $this->path) {
+            $this->path = sys_get_temp_dir();
+        }
+        return $this->path;
     }
 }

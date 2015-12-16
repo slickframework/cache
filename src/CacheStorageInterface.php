@@ -15,8 +15,12 @@ namespace Slick\Cache;
  * @package Slick\Cache
  * @author  Filipe Silva <silvam.filipe@gmail.com>
  */
-interface CacheInterface
+interface CacheStorageInterface
 {
+
+    const CACHE_EXPIRED       =  0;
+    const CACHE_DEFAULT       = -1;
+    const CACHE_NEVER_EXPIRES = -2;
 
     /**
      * Retrieves a previously stored value.
@@ -39,7 +43,7 @@ interface CacheInterface
      *
      * @return self A self instance for chaining method calls.
      */
-    public function set($key, $value, $duration = -1);
+    public function set($key, $value, $duration = self::CACHE_DEFAULT);
 
     /**
      * Erase the value stored with a given key.
