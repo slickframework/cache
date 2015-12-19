@@ -24,11 +24,8 @@ use Slick\Common\Base;
  *
  * @property string     $path
  * @property Filesystem $filesystem
- * @property string     $bin
- * @property string     $cacheItemClass
- * @property int        $duration
  */
-class File extends Base implements CacheDriverInterface
+class File extends AbstractCacheDriver implements CacheDriverInterface
 {
 
     /**
@@ -42,24 +39,6 @@ class File extends Base implements CacheDriverInterface
      * @var Filesystem
      */
     protected $filesystem;
-
-    /**
-     * @readwrite
-     * @var int
-     */
-    protected $duration = 120;
-
-    /**
-     * @readwrite
-     * @var string
-     */
-    protected $bin = 'cache-bin';
-
-    /**
-     * @readwrite
-     * @var string
-     */
-    protected $cacheItemClass = 'Slick\Cache\CacheItem';
 
     /**
      * Lazy loads filesystem based on File::$path property
@@ -188,19 +167,6 @@ class File extends Base implements CacheDriverInterface
                 ->setData(unserialize($source->data));
         }
         return $item;
-    }
-
-    /**
-     * Returns an empty cache item
-     *
-     * @return CacheItemInterface
-     */
-    public function getCacheItem()
-    {
-        /** @var CacheItem $cacheItem */
-        $cacheItem = new $this->cacheItemClass();
-        $cacheItem->duration = $this->duration;
-        return $cacheItem;
     }
 
     /**
