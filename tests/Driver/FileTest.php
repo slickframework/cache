@@ -103,7 +103,7 @@ class FileTest extends TestCase
     {
         $filesystem = $this->getFilesystemMock();
         $filesystem->expects($this->once())
-            ->method('listFiles')
+            ->method('listContents')
             ->with('cache-bin')
             ->willReturn([
                 [
@@ -187,7 +187,6 @@ class FileTest extends TestCase
     {
         $class = FilesystemInterface::class;
         $methods = get_class_methods($class);
-        $methods[] = 'listFiles';
 
         /** @var FilesystemInterface|MockObject $filesystem */
         $filesystem = $this->getMockBuilder($class)

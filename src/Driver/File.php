@@ -107,7 +107,7 @@ class File extends AbstractCacheDriver implements CacheDriverInterface
             $key
         );
         $name = "/^$name\.tmp$/i";
-        $files = $this->filesystem->listFiles($this->bin);
+        $files = $this->filesystem->listContents($this->bin);
         foreach ($files as $file) {
             if (preg_match($name, $file['basename'])) {
                 $this->getFilesystem()
