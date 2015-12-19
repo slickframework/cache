@@ -14,7 +14,6 @@ use League\Flysystem\Filesystem;
 use Slick\Cache\CacheItem;
 use Slick\Cache\CacheItemInterface;
 use Slick\Cache\Exception\ServiceException;
-use Slick\Common\Base;
 
 /**
  * Uses file system to store cache data
@@ -102,9 +101,18 @@ class File extends AbstractCacheDriver implements CacheDriverInterface
      */
     public function erase($key)
     {
-        $name = $this->getFileName($key);
-        if ($this->getFilesystem()->has($name)) {
-            $this->getFilesystem()->delete($name);
+        $name = str_replace(
+            ['?', '*'],
+            ['(.)', '(.*)'],
+            $key
+        );
+        $name = "/^$name\.tmp$/i";
+        $files = $this->filesystem->listFiles($this->bin);
+        foreach ($files as $file) {
+            if (preg_match($name, $file['basename'])) {
+                $this->getFilesystem()
+                    ->delete($this->bin.'/'.$file['basename']);
+            }
         }
         return $this;
     }

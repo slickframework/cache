@@ -103,12 +103,17 @@ class FileTest extends TestCase
     {
         $filesystem = $this->getFilesystemMock();
         $filesystem->expects($this->once())
-            ->method('has')
-            ->with('cache-bin/test.tmp')
-            ->willReturn(true);
+            ->method('listFiles')
+            ->with('cache-bin')
+            ->willReturn([
+                [
+                    'basename' => 'test.tmp'
+                ]
+            ]);
         $filesystem->expects($this->once())
             ->method('delete')
             ->willReturn(true);
+
         $this->driver->filesystem = $filesystem;
         $this->driver->erase('test');
     }
@@ -182,6 +187,7 @@ class FileTest extends TestCase
     {
         $class = FilesystemInterface::class;
         $methods = get_class_methods($class);
+        $methods[] = 'listFiles';
 
         /** @var FilesystemInterface|MockObject $filesystem */
         $filesystem = $this->getMockBuilder($class)
