@@ -1,0 +1,8 @@
+php:
+  build: docker/php_5.5-cli
+  volumes:
+    - ./:/usr/src/myapp
+  links:
+    - memcache
+memcache:
+  image: memcached:latest
