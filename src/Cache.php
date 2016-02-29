@@ -26,6 +26,8 @@ class Cache
      * Known cache driver classes
      */
     const CACHE_FILE = 'Slick\Cache\Driver\File';
+    const CACHE_MEMORY = 'Slick\Cache\Driver\Memory';
+    const CACHE_MEMCACHED = 'Slick\Cache\Driver\Memcached';
     const CACHE_NULL = 'Slick\Cache\Driver\Null';
 
     /**
