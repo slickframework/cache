@@ -4,7 +4,7 @@
     "license": "MIT",
     "homepage": "https://github.com/slickframework/cache",
     "keywords": ["slick", "cache", "memcached"],
-    "version": "v1.2.0",
+    "version": "v1.2.1",
     "authors": [
         {
             "name": "Filipe Silva",
