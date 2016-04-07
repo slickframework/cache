@@ -111,7 +111,8 @@ class CacheItem extends Base implements CacheItemInterface
     public function set($data, $expire = CacheStorageInterface::CACHE_DEFAULT)
     {
         $this->setData($data);
-        $currentDate = $this->getCurrentDate()->getTimestamp();
+        $currentDate = $this->getCurrentDate();
+        $currentDate = $currentDate->getTimestamp();
         switch ($expire) {
             case CacheStorageInterface::CACHE_DEFAULT:
                 $duration = $this->duration;
@@ -125,8 +126,9 @@ class CacheItem extends Base implements CacheItemInterface
                 $duration = $expire;
                 break;
         }
-        $expirationDate = (new DateTime())
-            ->setTimestamp($currentDate+$duration);
+        $expirationDate = new DateTime();
+        $expire = $currentDate+$duration;
+        $expirationDate->setTimestamp($expire);
         return $this->setExpirationDate($expirationDate);
     }
 
