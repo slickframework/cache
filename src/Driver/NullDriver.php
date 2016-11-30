@@ -17,7 +17,7 @@ use Slick\Cache\CacheItemInterface;
  * @package Slick\Cache\Driver
  * @author  Filipe Silva <silvam.filipe@gmail.com>
  */
-class Null extends AbstractCacheDriver implements CacheDriverInterface
+class NullDriver extends AbstractCacheDriver implements CacheDriverInterface
 {
 
     /**

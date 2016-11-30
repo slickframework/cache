@@ -11,7 +11,7 @@ namespace Slick\Tests\Cache\Driver;
 
 use PHPUnit_Framework_TestCase as TestCase;
 use Slick\Cache\CacheItem;
-use Slick\Cache\Driver\Null as NullDriver;
+use Slick\Cache\Driver\NullDriver as NullDriver;
 
 /**
  * Null cache driver test case

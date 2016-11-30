@@ -12,6 +12,7 @@ namespace Slick\Tests\Cache\Driver;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 use PHPUnit_Framework_TestCase as TestCase;
 use Slick\Cache\CacheItem;
+use Slick\Cache\Driver\CacheDriverInterface;
 use Slick\Cache\Driver\Memcached;
 
 /**
@@ -80,11 +81,9 @@ class MemcachedTest extends TestCase
         $key = 'test';
         $composed = 'cache-bin:test';
 
-        $server = $this->getMemcachedMock(['get']);
-        $server->expects($this->once())
-            ->method('get')
-            ->with($composed)
-            ->willReturn($data);
+        $server = \Phake::mock(CacheDriverInterface::class);
+        \Phake::when($server)->get($composed)->thenReturn($data);
+
         $this->driver->server = $server;
         $item = $this->driver->get($key);
         $this->assertEquals($data, $item->getData());
@@ -99,11 +98,8 @@ class MemcachedTest extends TestCase
     {
         $key = 'test';
         $composed = 'cache-bin:test';
-        $server = $this->getMemcachedMock(['get']);
-        $server->expects($this->once())
-            ->method('get')
-            ->with($composed)
-            ->willReturn(false);
+        $server = \Phake::mock(CacheDriverInterface::class);
+        \Phake::when($server)->get($composed)->thenReturn(false);
         $this->driver->server = $server;
         $item = $this->driver->get($key);
         $this->assertNull($item->getData());
