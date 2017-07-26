@@ -1,0 +1,4 @@
+suites:
+  slick_cache_suite:
+    namespace: Slick\Cache
+    psr4_prefix: Slick\Cache
