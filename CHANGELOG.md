@@ -1,6 +1,26 @@
 # Changelog
 
-All Notable changes to `Slick/cache` will be documented in this file
+All Notable changes to `slick/cache` will be documented in this file.
+
+Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
+
+## NEXT - YYYY-MM-DD
+
+
+### Added
+- PSR-6 Cache implementation
+- Contributor Code of Conduct
+- Issue template
+- Pull request template
+
+### Deprecated
+
+### Fixed
+- Contributing documentation 
+
+### Removed
+
+### Security
 
 ## 1.2.1 - 2016-04-07
 
