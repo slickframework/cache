@@ -25,9 +25,6 @@ use Psr\Cache\CacheItemPoolInterface;
 interface CacheStorageInterface extends CacheItemPoolInterface
 {
 
-    const CACHE_EXPIRED       =  0;
-    const CACHE_DEFAULT       = -1;
-    const CACHE_NEVER_EXPIRES = -2;
 
     /**
      * Retrieves a previously stored value.
@@ -54,7 +51,7 @@ interface CacheStorageInterface extends CacheItemPoolInterface
      *
      * @deprecated You SHOULD use the Slick\Cache\CacheSimpleStorageInterface
      */
-    public function set($key, $value, $duration = self::CACHE_DEFAULT);
+    public function set($key, $value, $duration = null);
 
     /**
      * Erase the value stored with a given key.
@@ -66,12 +63,12 @@ interface CacheStorageInterface extends CacheItemPoolInterface
      * Therefore this method is more expensive as it will grab all the keys
      * in the current pool and iterate over the ones that march your alias
      *
-     * @param String $alias The key alias to match
+     * @param String $pattern The key alias to match
      *
      * @return bool
      *   True if the items were successfully removed. False if there was an error.
      */
-    public function erase($alias);
+    public function erase($pattern);
 
     /**
      * Flushes all values controlled by this pool

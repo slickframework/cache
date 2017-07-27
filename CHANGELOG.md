@@ -14,13 +14,21 @@ Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) princip
 - Pull request template
 
 ### Deprecated
+- CacheStorageInterface::get() was moved to the new CacheSimpleStorageInterface::get() and
+  deprecated. It is an alias of CacheStorageInterface::getItem()
+- CacheStorageInterface::set() was moved to the new CacheSimpleStorageInterface::set() and
+  deprecated. It is an alias of CacheStorageInterface::save()
+- CacheStorageInterface::flush() will be removed in the next releases. 
 
 ### Fixed
+- CacheStorageInterface change to fit the PSR-6 requirements
 - Contributing documentation 
 
 ### Removed
 
 ### Security
+
+
 
 ## 1.2.1 - 2016-04-07
 

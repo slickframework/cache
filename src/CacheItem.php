@@ -9,7 +9,7 @@
 
 namespace Slick\Cache;
 
-use Psr\Cache\CacheItemInterface;
+use DateTimeImmutable;
 
 /**
  * CacheItem
@@ -17,7 +17,7 @@ use Psr\Cache\CacheItemInterface;
  * @package Slick\Cache
  * @author  Filipe Silva <silvam.filipe@gmail.com>
 */
-class CacheItem implements CacheItemInterface, \Serializable
+class CacheItem implements CacheItemInterface
 {
     /**
      * @var string
@@ -188,5 +188,15 @@ class CacheItem implements CacheItemInterface, \Serializable
         $this->key = $data['key'];
         $this->value = $data['value'];
         $this->expires = $data['expires'];
+    }
+
+    /**
+     * Get item expiration date
+     *
+     * @return DateTimeImmutable|null
+     */
+    public function expires()
+    {
+        return $this->expires;
     }
 }
