@@ -8,6 +8,8 @@ Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) princip
 
 
 ### Added
+- CacheDriverInterface::has() that test the existence of a given key
+- CacheDriverInterface::getKeys() that returns all stored keys
 - PSR-6 Cache implementation
 - Contributor Code of Conduct
 - Issue template
@@ -25,6 +27,8 @@ Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) princip
 - Contributing documentation 
 
 ### Removed
+- CacheDriverInterface::getCacheItem() was removed. This logic was passed to the
+  CacheStorageInterface.
 
 ### Security
 
@@ -38,4 +42,4 @@ Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) princip
 ## 1.2.0 - 2016-02-29
 
 ### Added
-- First released stand alone cache package for Slick framework.
+- First released, stand alone cache package for Slick framework.

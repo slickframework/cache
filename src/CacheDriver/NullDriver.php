@@ -7,19 +7,19 @@
  * file that was distributed with this source code.
  */
 
-namespace Slick\Cache;
+namespace Slick\Cache\CacheDriver;
 
+use Slick\Cache\CacheDriverInterface;
 use Slick\Cache\Exception\KeyNotFoundException;
 
 /**
- * CacheDriverInterface
+ * NullDriver
  *
- * @package Slick\Cache
+ * @package Slick\Cache\CacheDriver
  * @author  Filipe Silva <silvam.filipe@gmail.com>
 */
-interface CacheDriverInterface
+class NullDriver implements CacheDriverInterface
 {
-
     /**
      * Stores a cache value
      *
@@ -29,7 +29,10 @@ interface CacheDriverInterface
      *
      * @return bool
      */
-    public function set(string $key, string $serializedValue, \DateTimeImmutable $expires = null);
+    public function set(string $key, string $serializedValue, \DateTimeImmutable $expires = null)
+    {
+        return true;
+    }
 
     /**
      * Gets cache item saved with provided key
@@ -44,7 +47,12 @@ interface CacheDriverInterface
      *
      * @return string a serialized version of cached item
      */
-    public function get(string $key): string;
+    public function get(string $key): string
+    {
+        throw new KeyNotFoundException(
+            "There are no values saved with key '{$key}'"
+        );
+    }
 
     /**
      * Check if there's an item cached under provided key
@@ -53,14 +61,20 @@ interface CacheDriverInterface
      *
      * @return bool
      */
-    public function has(string $key): bool;
+    public function has(string $key): bool
+    {
+        return false;
+    }
 
     /**
      * Deletes all saved items in this cache bin
      *
      * @return bool
      */
-    public function flush(): bool;
+    public function flush(): bool
+    {
+        return true;
+    }
 
     /**
      * Erases cache item stored with provided key
@@ -69,12 +83,18 @@ interface CacheDriverInterface
      *
      * @return bool
      */
-    public function erase(string $key): bool;
+    public function erase(string $key): bool
+    {
+        return true;
+    }
 
     /**
      * Get all stored keys
      *
      * @return string[]
      */
-    public function getKeys();
+    public function getKeys()
+    {
+        return [];
+    }
 }
