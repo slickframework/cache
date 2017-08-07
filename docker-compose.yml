@@ -9,3 +9,8 @@ services:
     working_dir: /usr/src/app
     environment:
       - USE_XDEBUG=yes
+    links:
+      - memcached
+
+  memcached:
+    image: memcached:latest

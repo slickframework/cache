@@ -75,4 +75,23 @@ class MemcachedDriverSpec extends ObjectBehavior
         $memcachedServer->get('test')->willReturn('test');
         $this->has('test')->shouldBe(true);
     }
+
+    function it_can_erase_a_given_value(\Memcached $memcachedServer)
+    {
+        $this->erase('test')->shouldBe(true);
+        $memcachedServer->delete('test')->shouldHaveBeenCalled();
+    }
+
+    function it_can_flush_all_saved_values(\Memcached $memcachedServer)
+    {
+        $this->flush()->shouldBe(true);
+        $memcachedServer->flush()->shouldHaveBeenCalled();
+    }
+
+    function it_returns_all_keys_from_stored_values(\Memcached $memcachedServer)
+    {
+        $values = [];
+        $memcachedServer->getAllKeys()->willReturn($values);
+        $this->getKeys()->shouldBe($values);
+    }
 }

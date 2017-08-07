@@ -93,7 +93,8 @@ class MemcachedDriver implements CacheDriverInterface
      */
     public function flush(): bool
     {
-        // TODO: Implement flush() method.
+        $this->server->flush();
+        return true;
     }
 
     /**
@@ -105,7 +106,8 @@ class MemcachedDriver implements CacheDriverInterface
      */
     public function erase(string $key): bool
     {
-        // TODO: Implement erase() method.
+        $this->server->delete($key);
+        return true;
     }
 
     /**
@@ -115,7 +117,8 @@ class MemcachedDriver implements CacheDriverInterface
      */
     public function getKeys()
     {
-        // TODO: Implement getKeys() method.
+        $keys = $this->server->getAllKeys();
+        return $keys === false ? [] : $keys;
     }
 
     /**
