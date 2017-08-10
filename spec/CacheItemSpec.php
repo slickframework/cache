@@ -23,7 +23,7 @@ class CacheItemSpec extends ObjectBehavior
 {
     function let()
     {
-        $this->beConstructedWith('key', 'value');
+        $this->beConstructedWith('key', 'value', 3);
     }
 
     function it_is_initializable()

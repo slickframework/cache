@@ -137,8 +137,8 @@ class CacheItem implements CacheItemInterface
     public function isHit()
     {
         return null === $this->expires
-            ? true
-            : $this->now() <= $this->expires;
+            ? false
+            : $this->now() < $this->expires;
     }
 
     /**
