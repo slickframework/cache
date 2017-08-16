@@ -141,6 +141,5 @@ class MemcachedDriver implements CacheDriverInterface
         return (60*60*24*30) > $diff
             ? $diff
             : $expires->getTimestamp();
-
     }
 }

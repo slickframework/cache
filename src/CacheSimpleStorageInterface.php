@@ -9,7 +9,6 @@
 
 namespace Slick\Cache;
 
-
 interface CacheSimpleStorageInterface
 {
 

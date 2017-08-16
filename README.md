@@ -7,12 +7,17 @@
 [![Total Downloads](https://img.shields.io/packagist/dt/slick/cache.svg?style=flat-square)](https://packagist.org/packages/slick/cache)
 
 
-Slick cache package works with cache providing services installed on
-your system.
+Slick cache package is an implementation of [PSR-6](http://www.php-fig.org/psr/psr-6/)
+and [PSR-16](http://www.php-fig.org/psr/psr-16/) interfaces for caching that works with
+cache providing services installed on your system.
 
 It comes with support for *Memcached* (`memcached` daemon) and *File*
 (caching data into files) out of the box, but it also defines a driver
 interface that allows you to add your own drivers to your project.
+
+This package is compliant with [PSR-2](http://www.php-fig.org/psr/psr-2/) code
+standards and [PSR-4](http://www.php-fig.org/psr/psr-4/) autoload standards and
+applies the [semantic version 2.0.0 specification](http://semver.org/spec/v2.0.0.html).
 
 ## Install
 

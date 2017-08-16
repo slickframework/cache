@@ -349,7 +349,9 @@ class CacheStorage implements CacheStorageInterface
         $keys = $this->driver->getKeys();
         $toDelete = [];
         foreach ($keys as $key) {
-            if (preg_match($regexp, $key)) $toDelete[] = $key;
+            if (preg_match($regexp, $key)) {
+                $toDelete[] = $key;
+            }
         }
 
         return $this->deleteItems($toDelete);

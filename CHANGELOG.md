@@ -11,6 +11,7 @@ Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) princip
 - CacheDriverInterface::has() that test the existence of a given key
 - CacheDriverInterface::getKeys() that returns all stored keys
 - PSR-6 Cache implementation
+- PSR-16 Cache implementation
 - Contributor Code of Conduct
 - Issue template
 - Pull request template
