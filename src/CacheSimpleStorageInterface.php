@@ -9,7 +9,15 @@
 
 namespace Slick\Cache;
 
-interface CacheSimpleStorageInterface
+use Psr\SimpleCache\CacheInterface;
+
+/**
+ * CacheSimpleStorageInterface
+ *
+ * @package Slick\Cache
+ * @author  Filipe Silva <filipe.silva@sata.pt>
+ */
+interface CacheSimpleStorageInterface extends CacheInterface
 {
 
 }

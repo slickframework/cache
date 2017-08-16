@@ -77,6 +77,8 @@ interface CacheStorageInterface extends CacheItemPoolInterface
      *
      * @return bool
      *   True if the pool was successfully cleared. False if there was an error.
+     *
+     * @deprecated You SHOULD use the CacheStorageInterface::clear()
      */
     public function flush();
 }

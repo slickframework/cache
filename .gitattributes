@@ -3,10 +3,14 @@
 
 # Ignore all test and documentation with "export-ignore".
 /.gitattributes     export-ignore
+/.editorconfig     export-ignore
 /.gitignore         export-ignore
 /.travis.yml        export-ignore
 /phpunit.xml.dist   export-ignore
+/phpspec.yml.dist   export-ignore
 /.scrutinizer.yml   export-ignore
 /tests              export-ignore
 /features           export-ignore
-/specs           export-ignore
+/specs              export-ignore
+/functional         export-ignore
+/build              export-ignore

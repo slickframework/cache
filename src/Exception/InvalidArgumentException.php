@@ -11,6 +11,7 @@ namespace Slick\Cache\Exception;
 
 use InvalidArgumentException as PhpException;
 use Psr\Cache\InvalidArgumentException as PsrException;
+use Psr\SimpleCache\InvalidArgumentException as SimpleCacheInvalidArgumentException;
 use Slick\Cache\Exception;
 
 /**
@@ -19,7 +20,10 @@ use Slick\Cache\Exception;
  * @package Slick\Cache\Exception
  * @author  Filipe Silva <filipe.silva@sata.pt>
  */
-class InvalidArgumentException extends PhpException implements Exception, PsrException
+class InvalidArgumentException extends PhpException implements
+    Exception,
+    PsrException,
+    SimpleCacheInvalidArgumentException
 {
 
 }
