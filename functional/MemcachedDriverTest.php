@@ -28,8 +28,8 @@ class MemcachedDriverTest extends TestCase
     public static function setUpBeforeClass()
     {
         self::$memcachedServer = new \Memcached();
-        //self::$memcachedServer->addServer('memcached', 11211);
-        self::$memcachedServer->addServer('0.0.0.0', 11211);
+        self::$memcachedServer->addServer('memcached', 11211);
+        //self::$memcachedServer->addServer('0.0.0.0', 11211);
         self::$memcachedServer->flush();
     }
 
