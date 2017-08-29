@@ -106,7 +106,7 @@ class MemcachedDriver implements CacheDriverInterface
      */
     public function erase(string $key): bool
     {
-        return $this->server->delete($key, 0);
+        return (boolean) $this->server->delete($key);
     }
 
     /**

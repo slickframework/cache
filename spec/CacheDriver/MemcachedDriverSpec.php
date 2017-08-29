@@ -78,8 +78,8 @@ class MemcachedDriverSpec extends ObjectBehavior
 
     function it_can_erase_a_given_value(\Memcached $memcachedServer)
     {
+        $memcachedServer->delete('test')->shouldBeCalled()->willReturn(true);
         $this->erase('test')->shouldBe(true);
-        $memcachedServer->delete('test')->shouldHaveBeenCalled();
     }
 
     function it_can_flush_all_saved_values(\Memcached $memcachedServer)
