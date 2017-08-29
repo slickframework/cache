@@ -24,7 +24,7 @@
     }
   },
   "require": {
-    "php": "^7.0|hhvm",
+    "php": "^7.0",
     "psr/cache": "^1.0@dev",
     "psr/simple-cache": "^1.0@dev"
   },
