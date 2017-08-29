@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of sata/Cache
  *
@@ -27,7 +28,8 @@ class MemcachedDriverTest extends TestCase
     public static function setUpBeforeClass()
     {
         self::$memcachedServer = new \Memcached();
-        self::$memcachedServer->addServer('memcached', 11211);
+        //self::$memcachedServer->addServer('memcached', 11211);
+        self::$memcachedServer->addServer('0.0.0.0', 11211);
         self::$memcachedServer->flush();
     }
 
@@ -61,9 +63,13 @@ class MemcachedDriverTest extends TestCase
 
     function testErasePattern()
     {
+        // memcached takes some time to update its list of keys
+        do {
+            $array = self::$memcachedServer->getAllKeys();
+        } while (empty($array));
+
         $this->cache->erase('t?s*');
-        $item = $this->cache->getItem('test1');
-        $this->assertFalse($item->isHit());
+        $this->assertFalse($this->cache->hasItem('test1'));
     }
 
     function testFlushAllValues()
