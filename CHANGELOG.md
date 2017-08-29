@@ -4,7 +4,7 @@ All Notable changes to `slick/cache` will be documented in this file.
 
 Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 
-## NEXT - YYYY-MM-DD
+## 2.x.x - YYYY-MM-DD
 
 
 ### Added
@@ -30,9 +30,6 @@ Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) princip
 ### Removed
 - CacheDriverInterface::getCacheItem() was removed. This logic was passed to the
   CacheStorageInterface.
-
-### Security
-
 
 
 ## 1.2.1 - 2016-04-07

@@ -10,6 +10,7 @@
 namespace Slick\Cache\CacheDriver;
 
 use Slick\Cache\CacheDriverInterface;
+use Slick\Cache\CacheItem;
 use Slick\Cache\Exception\KeyNotFoundException;
 
 /**
@@ -37,21 +38,11 @@ class NullDriver implements CacheDriverInterface
     /**
      * Gets cache item saved with provided key
      *
-     * You should check value existence with CacheDriverInterface::has() before
-     * calling this method, otherwise an exception will be thrown.
-     *
-     * @param string $key
-     *
-     * @throws KeyNotFoundException
-     *      If the key was not found or previously saved.
-     *
      * @return string a serialized version of cached item
      */
     public function get(string $key): string
     {
-        throw new KeyNotFoundException(
-            "There are no values saved with key '{$key}'"
-        );
+        return serialize(new CacheItem($key));
     }
 
     /**

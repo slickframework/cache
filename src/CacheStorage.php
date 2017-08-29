@@ -67,7 +67,7 @@ class CacheStorage implements CacheStorageInterface
      */
     public function getItem($key)
     {
-        $this->checkKey($key);
+        self::checkKey($key);
 
         if (! $this->hasItem($key)) {
             return new CacheItem($key);
@@ -122,7 +122,7 @@ class CacheStorage implements CacheStorageInterface
      */
     public function hasItem($key)
     {
-        $this->checkKey($key);
+        self::checkKey($key);
 
         $inCurrentPool = array_key_exists($key, $this->currentPoolCollection());
 
@@ -157,7 +157,7 @@ class CacheStorage implements CacheStorageInterface
      */
     public function deleteItem($key)
     {
-        $this->checkKey($key);
+        self::checkKey($key);
 
         if (! $this->hasItem($key)) {
             return true;
@@ -206,7 +206,7 @@ class CacheStorage implements CacheStorageInterface
             return false;
         }
 
-        $this->checkKey($item->getKey());
+        self::checkKey($item->getKey());
 
         $this->items[$item->getKey()] = $item;
 
@@ -233,7 +233,7 @@ class CacheStorage implements CacheStorageInterface
             return false;
         }
 
-        $this->checkKey($item->getKey());
+        self::checkKey($item->getKey());
 
         $this->deferred[$item->getKey()] = $item;
 
@@ -266,7 +266,7 @@ class CacheStorage implements CacheStorageInterface
      *
      * @param string $key
      */
-    private function checkKey(string $key)
+    public static function checkKey(string $key)
     {
         $exp = '/^[0-9a-z\._]{1,256}$/i';
         if (! preg_match($exp, $key)) {

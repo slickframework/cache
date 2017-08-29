@@ -10,6 +10,7 @@
 namespace Slick\Cache;
 
 use DateInterval;
+use Slick\Cache\Exception\InvalidArgumentException;
 
 /**
  * CacheSimpleStorage
@@ -49,11 +50,20 @@ class CacheSimpleStorage implements CacheSimpleStorageInterface
      * @return mixed The value of the item from the cache, or $default in case of cache miss.
      *
      * @throws \Psr\SimpleCache\InvalidArgumentException
-     *   MUST be thrown if the $key string is not a legal value.
+     *   if the $key string is not a legal value.
      */
     public function get($key, $default = null)
     {
-        // TODO: Implement get() method.
+        CacheStorage::checkKey($key);
+
+        /** @var CacheItem $item */
+        $item = unserialize($this->driver->get($key));
+
+        if (! $item->isHit()) {
+            return $default;
+        }
+
+        return $item->get();
     }
 
     /**
@@ -69,10 +79,11 @@ class CacheSimpleStorage implements CacheSimpleStorageInterface
      * @return bool True on success and false on failure.
      *
      * @throws \Psr\SimpleCache\InvalidArgumentException
-     *   Is thrown if the $key string is not a legal value.
+     *   If the $key string is not a legal value.
      */
     public function set($key, $value, $ttl = null)
     {
+        CacheStorage::checkKey($key);
         $item = $this->cacheStorage->getItem($key);
         $item->set($value)->expiresAfter($ttl);
         return $this->cacheStorage->save($item);
@@ -86,11 +97,12 @@ class CacheSimpleStorage implements CacheSimpleStorageInterface
      * @return bool True if the item was successfully removed. False if there was an error.
      *
      * @throws \Psr\SimpleCache\InvalidArgumentException
-     *   MUST be thrown if the $key string is not a legal value.
+     *   if the $key string is not a legal value.
      */
     public function delete($key)
     {
-        // TODO: Implement delete() method.
+        CacheStorage::checkKey($key);
+        return $this->driver->erase($key);
     }
 
     /**
@@ -100,7 +112,7 @@ class CacheSimpleStorage implements CacheSimpleStorageInterface
      */
     public function clear()
     {
-        // TODO: Implement clear() method.
+        return $this->driver->flush();
     }
 
     /**
@@ -109,34 +121,61 @@ class CacheSimpleStorage implements CacheSimpleStorageInterface
      * @param iterable $keys A list of keys that can obtained in a single operation.
      * @param mixed $default Default value to return for keys that do not exist.
      *
-     * @return iterable A list of key => value pairs. Cache keys that do not exist or are stale will have $default as value.
+     * @return iterable A list of key => value pairs. Cache keys that do not exist or
+     *      are stale will have $default as value.
      *
      * @throws \Psr\SimpleCache\InvalidArgumentException
-     *   MUST be thrown if $keys is neither an array nor a Traversable,
+     *   If $keys is neither an array nor a Traversable,
      *   or if any of the $keys are not a legal value.
      */
     public function getMultiple($keys, $default = null)
     {
-        // TODO: Implement getMultiple() method.
+        $valid = is_array($keys) || $keys instanceof \Traversable;
+        if (! $valid) {
+            throw new InvalidArgumentException(
+                "Cannot iterate over keys. To get multiple values you should pass a " .
+                "list of all keys you want to retrieve."
+            );
+        }
+
+        $result = [];
+        foreach ($keys as $key) {
+            $result[$key] = $this->get($key, $default);
+        }
+        return $result;
     }
 
     /**
      * Persists a set of key => value pairs in the cache, with an optional TTL.
      *
      * @param iterable $values A list of key => value pairs for a multiple-set operation.
-     * @param null|int|DateInterval $ttl Optional. The TTL value of this item. If no value is sent and
-     *                                      the driver supports TTL then the library may set a default value
-     *                                      for it or let the driver take care of that.
+     * @param null|int|DateInterval $ttl Optional. The TTL value of this item.
+     *      If no value is sent and the driver supports TTL then the library may
+     *      set a default value for it or let the driver take care of that.
      *
      * @return bool True on success and false on failure.
      *
      * @throws \Psr\SimpleCache\InvalidArgumentException
-     *   MUST be thrown if $values is neither an array nor a Traversable,
+     *   If $values is neither an array nor a Traversable,
      *   or if any of the $values are not a legal value.
      */
     public function setMultiple($values, $ttl = null)
     {
-        // TODO: Implement setMultiple() method.
+        $valid = is_array($values) || $values instanceof \Traversable;
+        if (! $valid) {
+            throw new InvalidArgumentException(
+                "Cannot iterate over values. To set multiple values you need to ".
+                "pass a list of key => value pairs with the values you want to cache."
+            );
+        }
+
+        foreach ($values as $key => $value) {
+            if (! $this->set($key, $value, $ttl)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -152,7 +191,21 @@ class CacheSimpleStorage implements CacheSimpleStorageInterface
      */
     public function deleteMultiple($keys)
     {
-        // TODO: Implement deleteMultiple() method.
+        $valid = is_array($keys) || $keys instanceof \Traversable;
+        if (! $valid) {
+            throw new InvalidArgumentException(
+                "Cannot iterate over keys. To delete multiple values you should pass a " .
+                "list of all keys you want to delete."
+            );
+        }
+
+        foreach ($keys as $key) {
+            if (! $this->delete($key)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -168,10 +221,12 @@ class CacheSimpleStorage implements CacheSimpleStorageInterface
      * @return bool
      *
      * @throws \Psr\SimpleCache\InvalidArgumentException
-     *   MUST be thrown if the $key string is not a legal value.
+     *   if the $key string is not a legal value.
      */
     public function has($key)
     {
-        // TODO: Implement has() method.
+        CacheStorage::checkKey($key);
+
+        return $this->driver->has($key);
     }
 }

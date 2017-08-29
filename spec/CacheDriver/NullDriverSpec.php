@@ -12,6 +12,7 @@ namespace spec\Slick\Cache\CacheDriver;
 use Slick\Cache\CacheDriver\NullDriver;
 use PhpSpec\ObjectBehavior;
 use Slick\Cache\CacheDriverInterface;
+use Slick\Cache\CacheItem;
 use Slick\Cache\Exception\KeyNotFoundException;
 
 /**
@@ -49,8 +50,8 @@ class NullDriverSpec extends ObjectBehavior
 
     function it_returns_false_when_getting_values()
     {
-        $this->shouldThrow(KeyNotFoundException::class)
-            ->during('get', ['test']);
+        $expected = serialize(new CacheItem('test'));
+        $this->get('test')->shouldBe($expected);
     }
 
     function it_returns_always_true_on_setting_values()

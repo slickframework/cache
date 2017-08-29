@@ -34,13 +34,7 @@ interface CacheDriverInterface
     /**
      * Gets cache item saved with provided key
      *
-     * You should check value existence with CacheDriverInterface::has() before
-     * calling this method, otherwise an exception will be thrown.
-     *
      * @param string $key
-     *
-     * @throws KeyNotFoundException
-     *      If the key was not found or previously saved.
      *
      * @return string a serialized version of cached item
      */
